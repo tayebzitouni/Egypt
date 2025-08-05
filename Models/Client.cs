@@ -16,6 +16,7 @@ namespace freelanceProjectEgypt03.Models
         [MaxLength(15)]
         public string PhoneNumber { get; set; }
 
+        public string hi { get; set; }
 
         [MaxLength(15)]
         public string email { get; set; }
