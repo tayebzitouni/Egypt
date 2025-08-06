@@ -15,6 +15,8 @@ namespace freelanceProjectEgypt03.Repositories
 
         public async Task<string> AddAsync(Client entity)
         {
+            entity.Password = BCrypt.Net.BCrypt.HashPassword(entity.Password);
+
             _context.Clients.Add(entity);
             await _context.SaveChangesAsync();
             return "Success";

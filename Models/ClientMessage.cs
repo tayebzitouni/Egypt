@@ -9,9 +9,9 @@ namespace freelanceProjectEgypt03.Models
         public DateTime date { get; set; }
        
 
-        public Priorite priorite { get; set; }
+        public string priorite { get; set; }
 
-        public ContactMethode PreferedContactMethode { get; set; }
+        public string PreferedContactMethode { get; set; }
 
         public string description { get; set; }
     }

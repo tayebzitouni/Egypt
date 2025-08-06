@@ -19,6 +19,7 @@ builder.Services.AddScoped<IRepository<Client>, ClientRepository>();
 builder.Services.AddScoped<IRepository<Service>, ServiceRepository>();
 builder.Services.AddScoped<IRepository<DemandeDeService>, DemandeDeServiceRepository>();
 builder.Services.AddScoped<IRepository<ContactUs>, ContactUsRepository>();
+builder.Services.AddScoped<IPartnerRepository, PartnerRepository>();
 builder.Services.AddScoped<IRepository<Partner>, PartnerRepository>();
 
 // 🔐 Configure JWT Authentication
@@ -73,6 +74,7 @@ builder.Services.AddSwaggerGen(options =>
         }
     });
 });
+builder.WebHost.UseWebRoot("wwwroot");
 
 var app = builder.Build();
 
@@ -86,6 +88,7 @@ if (app.Environment.IsDevelopment())
 // ⛔ Must be before UseAuthorization
 app.UseAuthentication();
 app.UseAuthorization();
+app.UseStaticFiles(); // Obligatoire pour que wwwroot soit servi
 
 app.MapControllers();
 

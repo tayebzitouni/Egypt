@@ -1,6 +1,7 @@
-﻿using freelanceProjectEgypt03.Interfaces;
+﻿using freelanceProjectEgypt03.Dtos;
+using freelanceProjectEgypt03.Dtos.freelanceProjectEgypt03.Dtos;
+using freelanceProjectEgypt03.Interfaces;
 using freelanceProjectEgypt03.Models;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace freelanceProjectEgypt03.Controllers
@@ -11,38 +12,111 @@ namespace freelanceProjectEgypt03.Controllers
     {
         private readonly IRepository<ContactUs> _repository;
 
-        public ContactUsController(IRepository<ContactUs> repository) => _repository = repository;
+        public ContactUsController(IRepository<ContactUs> repository)
+        {
+            _repository = repository;
+        }
 
+        // GET: api/ContactUs
         [HttpGet]
-        public async Task<IActionResult> GetAll() => Ok(await _repository.GetAllAsync());
+        public async Task<IActionResult> GetAll()
+        {
+            var contactMessages = await _repository.GetAllAsync();
+            var result = contactMessages.Select(c => new ContactUsDto
+            {
+                Name = c.Name,
+                id = c.Id,
+                Email = c.Email,
+                Phone = c.Phone,
+                Subject = c.Subject,
+                Description = c.description,
+                Priorite = c.priorite,
+                PreferedContactMethode = c.PreferedContactMethode,
+                Date = c.date
+            }).ToList();
 
+            return Ok(result);
+        }
+
+        // GET: api/ContactUs/5
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {
-            var result = await _repository.GetByIdAsync(id);
-            return result == null ? NotFound() : Ok(result);
+            var contact = await _repository.GetByIdAsync(id);
+            if (contact == null)
+                return NotFound();
+
+            var dto = new ContactUsDto
+            {
+                Name = contact.Name,
+                id = contact.Id,
+                Email = contact.Email,
+                Phone = contact.Phone,
+                Subject = contact.Subject,
+                Description = contact.description,
+                Priorite = contact.priorite,
+                PreferedContactMethode = contact.PreferedContactMethode,
+                Date = contact.date
+            };
+
+            return Ok(dto);
         }
 
+        // POST: api/ContactUs
         [HttpPost]
-        public async Task<IActionResult> Add(ContactUs contact)
+        public async Task<IActionResult> Add([FromBody] ContactUsDto dto)
         {
-            var response = await _repository.AddAsync(contact);
-            return Ok(response);
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var model = new ContactUs
+            {
+                Name = dto.Name,
+                Email = dto.Email,
+                Phone = dto.Phone,
+                Subject = dto.Subject,
+                description = dto.Description,
+                priorite = dto.Priorite,
+                PreferedContactMethode = dto.PreferedContactMethode,
+                date = dto.Date
+            };
+
+            await _repository.AddAsync(model);
+            return Ok("Message envoyé avec succès.");
         }
 
+        // PUT: api/ContactUs/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int id, ContactUs contact)
+        public async Task<IActionResult> Update(int id, [FromBody] ContactUsDto dto)
         {
-            var response = await _repository.UpdateAsync(id, contact);
-            return Ok(response);
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var model = new ContactUs
+            {
+                Name = dto.Name,
+                Email = dto.Email,
+                Phone = dto.Phone,
+                Subject = dto.Subject,
+                description = dto.Description,
+                priorite = dto.Priorite,
+                PreferedContactMethode = dto.PreferedContactMethode,
+                date = dto.Date
+            };
+
+            var result = await _repository.UpdateAsync(id, model);
+            if (result == "Not Found")
+                return NotFound();
+
+            return Ok("Message mis à jour avec succès.");
         }
 
+        // DELETE: api/ContactUs/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            var success = await _repository.DeleteAsync(id);
-            return success ? Ok() : NotFound();
+            var deleted = await _repository.DeleteAsync(id);
+            return deleted ? Ok("Message supprimé.") : NotFound();
         }
     }
 }
-

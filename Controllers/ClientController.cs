@@ -1,48 +1,109 @@
-﻿using freelanceProjectEgypt03.Interfaces;
+﻿using freelanceProjectEgypt03.Dtos.freelanceProjectEgypt03.Dtos;
+using freelanceProjectEgypt03.Interfaces;
 using freelanceProjectEgypt03.Models;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.ComponentModel.DataAnnotations;
 
 namespace freelanceProjectEgypt03.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ClientController : ControllerBase
+    public class ClientsController : ControllerBase
     {
         private readonly IRepository<Client> _repository;
 
-        public ClientController(IRepository<Client> repository) => _repository = repository;
+        public ClientsController(IRepository<Client> repository)
+        {
+            _repository = repository;
+        }
 
+        // GET: api/clients
         [HttpGet]
-        public async Task<IActionResult> GetAll() => Ok(await _repository.GetAllAsync());
+        public async Task<IActionResult> GetAll()
+        {
+            var clients = await _repository.GetAllAsync();
+            var result = clients.Select(c => new ClientDto
+            {
+                Id = c.Id,
+                Name = c.Name,
+                PhoneNumber = c.PhoneNumber,
+                Email = c.email,
+                StartDate = c.StartDate
+            }).ToList();
 
+            return Ok(result);
+        }
+
+        // GET: api/clients/5
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {
-            var result = await _repository.GetByIdAsync(id);
-            return result == null ? NotFound() : Ok(result);
+            var c = await _repository.GetByIdAsync(id);
+            if (c == null)
+                return NotFound("Client not found");
+
+            var dto = new ClientDto
+            {
+                Id = c.Id,
+                Name = c.Name,
+                PhoneNumber = c.PhoneNumber,
+                Email = c.email,
+                StartDate = c.StartDate
+            };
+
+            return Ok(dto);
         }
 
+        // POST: api/clients
         [HttpPost]
-        public async Task<IActionResult> Add(Client client)
+        public async Task<IActionResult> Add([FromBody] CreateClientDto dto)
         {
-            var response = await _repository.AddAsync(client);
-            return Ok(response);
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var client = new Client
+            {
+                Name = dto.Name,
+                PhoneNumber = dto.PhoneNumber,
+
+                email = dto.Email,
+                Password = BCrypt.Net.BCrypt.HashPassword(dto.Password),
+                StartDate = dto.StartDate
+            };
+
+            var result = await _repository.AddAsync(client);
+            return CreatedAtAction(nameof(GetById), new { id = client.Id }, result);
         }
 
+        // PUT: api/clients/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int id, Client client)
+        public async Task<IActionResult> Update(int id, [FromBody] CreateClientDto dto)
         {
-            var response = await _repository.UpdateAsync(id, client);
-            return Ok(response);
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var client = new Client
+            {
+                Name = dto.Name,
+                PhoneNumber = dto.PhoneNumber,
+                email = dto.Email,
+                StartDate = dto.StartDate,
+                Password  = dto.Password
+            };
+
+            var result = await _repository.UpdateAsync(id, client);
+            if (result == "Not Found")
+                return NotFound("Client not found");
+
+            return Ok(result);
         }
 
+        // DELETE: api/clients/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            var success = await _repository.DeleteAsync(id);
-            return success ? Ok() : NotFound();
+            var deleted = await _repository.DeleteAsync(id);
+            return deleted ? Ok("Client deleted successfully") : NotFound("Client not found");
         }
     }
 }
-

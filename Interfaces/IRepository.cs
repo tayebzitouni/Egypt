@@ -9,5 +9,7 @@ namespace freelanceProjectEgypt03.Interfaces
         Task<string> AddAsync(T entity);
         Task<string> UpdateAsync(int id, T entity);
         Task<bool> DeleteAsync(int id);
+
+
     }
 }

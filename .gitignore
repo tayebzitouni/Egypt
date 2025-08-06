@@ -1,1 +1,23 @@
-﻿
+﻿## Ignore Visual Studio files
+.vs/
+*.user
+*.suo
+
+## Build results
+bin/
+obj/
+*.dll
+*.exe
+
+## NuGet packages
+*.nupkg
+*.snupkg
+packages/
+
+## Others
+*.log
+*.tmp
+*.bak
+*.swp
+*.DS_Store
+*.vscode/

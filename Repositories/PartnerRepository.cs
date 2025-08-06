@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace freelanceProjectEgypt03.Repositories
 {
-    public class PartnerRepository : IRepository<Partner>
+    public class PartnerRepository : IPartnerRepository
     {
         private readonly AppDbContext _context;
 
@@ -15,6 +15,7 @@ namespace freelanceProjectEgypt03.Repositories
 
         public async Task<string> AddAsync(Partner entity)
         {
+            entity.Password = BCrypt.Net.BCrypt.HashPassword(entity.Password);
             _context.Partners.Add(entity);
             await _context.SaveChangesAsync();
             return "Success";
@@ -55,5 +56,14 @@ namespace freelanceProjectEgypt03.Repositories
             await _context.SaveChangesAsync();
             return "Updated";
         }
+
+        public async Task<List<Partner>> GetPartnersByServiceIdAsync(int serviceId)
+        {
+            return await _context.Partners
+                .Where(p => p.ServiceId == serviceId)
+                .Include(p => p.service) // إذا تحب تجيب بيانات الخدمة أيضًا
+                .ToListAsync();
+        }
+
     }
 }
