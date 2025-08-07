@@ -13,6 +13,7 @@ namespace freelanceProjectEgypt03.Controllers
     
 
     [ApiController]
+    [Authorize]
     public class ServicesController : ControllerBase
     {
         private readonly IRepository<Service> _repository;
