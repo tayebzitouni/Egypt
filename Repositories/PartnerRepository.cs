@@ -32,12 +32,12 @@ namespace freelanceProjectEgypt03.Repositories
 
         public async Task<List<Partner>> GetAllAsync() =>
      await _context.Partners
-         .Include(p => p.service)  // include the related service
+         .Include(p => p.service)  
          .ToListAsync();
 
         public async Task<Partner> GetByIdAsync(int id) =>
      await _context.Partners
-         .Include(p => p.service)  // include the related service
+         .Include(p => p.service)  
          .FirstOrDefaultAsync(p => p.Id == id);
 
         public async Task<string> UpdateAsync(int id, Partner entity)
@@ -61,7 +61,7 @@ namespace freelanceProjectEgypt03.Repositories
         {
             return await _context.Partners
                 .Where(p => p.ServiceId == serviceId)
-                .Include(p => p.service) // إذا تحب تجيب بيانات الخدمة أيضًا
+                .Include(p => p.service) 
                 .ToListAsync();
         }
 

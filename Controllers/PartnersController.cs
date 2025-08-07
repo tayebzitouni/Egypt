@@ -6,10 +6,13 @@ using Microsoft.EntityFrameworkCore;
 using freelanceProjectEgypt03.Dtos.freelanceProjectEgypt03.Dtos;
 using freelanceProjectEgypt03.Repositories;
 using freelanceProjectEgypt03.data.freelanceProjectEgypt03.Data;
+using Microsoft.AspNetCore.Authorization;
 
 namespace freelanceProjectEgypt03.Controllers
 {
     [Route("api/[controller]")]
+    [Authorize]
+
     [ApiController]
     public class PartnersController : ControllerBase
     {

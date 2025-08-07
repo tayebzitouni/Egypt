@@ -6,10 +6,12 @@ using Microsoft.EntityFrameworkCore;
 using freelanceProjectEgypt03.data.freelanceProjectEgypt03.Data;
 using freelanceProjectEgypt03.Dtos.freelanceProjectEgypt03.Dtos;
 using static System.Runtime.InteropServices.JavaScript.JSType;
+using Microsoft.AspNetCore.Authorization;
 
 namespace freelanceProjectEgypt03.Controllers
 {
     [ApiController]
+    [Authorize]
     [Route("api/[controller]")]
     public class DemandeDeServiceController : ControllerBase
     {
@@ -20,9 +22,7 @@ namespace freelanceProjectEgypt03.Controllers
             _context = context;
         }
 
-        /// <summary>
-        /// Add a new service request.
-        /// </summary>
+        
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] CreateDemandeDeServiceDto dto)
         {
@@ -48,9 +48,6 @@ namespace freelanceProjectEgypt03.Controllers
             return Ok("Created");
         }
 
-        /// <summary>
-        /// Get all demandes.
-        /// </summary>
         [HttpGet]
         public async Task<ActionResult<IEnumerable<ReadDemandeDeServiceDto>>> GetAll()
         {
@@ -77,9 +74,7 @@ namespace freelanceProjectEgypt03.Controllers
             return Ok(demandes);
         }
 
-        /// <summary>
-        /// Get a demande by id.
-        /// </summary>
+       
         [HttpGet("{id}")]
         public async Task<ActionResult<ReadDemandeDeServiceDto>> GetById(int id)
         {
@@ -110,9 +105,7 @@ namespace freelanceProjectEgypt03.Controllers
             return Ok(dto);
         }
 
-        /// <summary>
-        /// Delete a demande.
-        /// </summary>
+      
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
@@ -155,7 +148,6 @@ namespace freelanceProjectEgypt03.Controllers
         }
 
 
-        // GET: api/DemandeDeService/client/5
         [HttpGet("client/{clientId}")]
         public async Task<IActionResult> GetDemandesByClientId(int clientId)
         {

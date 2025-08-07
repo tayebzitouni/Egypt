@@ -13,10 +13,10 @@ namespace freelanceProjectEgypt03.Models
 
         public string Description { get; set; }
 
-        public int DurationMin { get; set; }  // Minimum duration
-        public int DurationMax { get; set; }  // Maximum duration
+        public int DurationMin { get; set; } 
+        public int DurationMax { get; set; }  
 
-        public DurationUnit DurationUnit { get; set; }  // Enum (Hour, Day, etc.)
+        public DurationUnit DurationUnit { get; set; }  
 
 
         public List<string> details { get; set; } = new();

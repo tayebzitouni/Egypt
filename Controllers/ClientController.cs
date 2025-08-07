@@ -1,12 +1,15 @@
 ﻿using freelanceProjectEgypt03.Dtos.freelanceProjectEgypt03.Dtos;
 using freelanceProjectEgypt03.Interfaces;
 using freelanceProjectEgypt03.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
 
 namespace freelanceProjectEgypt03.Controllers
 {
     [Route("api/[controller]")]
+    [Authorize]
+
     [ApiController]
     public class ClientsController : ControllerBase
     {
@@ -17,7 +20,7 @@ namespace freelanceProjectEgypt03.Controllers
             _repository = repository;
         }
 
-        // GET: api/clients
+        
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
@@ -34,7 +37,6 @@ namespace freelanceProjectEgypt03.Controllers
             return Ok(result);
         }
 
-        // GET: api/clients/5
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {
@@ -54,7 +56,6 @@ namespace freelanceProjectEgypt03.Controllers
             return Ok(dto);
         }
 
-        // POST: api/clients
         [HttpPost]
         public async Task<IActionResult> Add([FromBody] CreateClientDto dto)
         {
@@ -75,7 +76,6 @@ namespace freelanceProjectEgypt03.Controllers
             return CreatedAtAction(nameof(GetById), new { id = client.Id }, result);
         }
 
-        // PUT: api/clients/5
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(int id, [FromBody] CreateClientDto dto)
         {
@@ -98,7 +98,6 @@ namespace freelanceProjectEgypt03.Controllers
             return Ok(result);
         }
 
-        // DELETE: api/clients/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {

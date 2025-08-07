@@ -5,10 +5,13 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using freelanceProjectEgypt03.data.freelanceProjectEgypt03.Data;
 using freelanceProjectEgypt03.Dtos.freelanceProjectEgypt03.Dtos;
+using Microsoft.AspNetCore.Authorization;
 
 namespace freelanceProjectEgypt03.Controllers
 {
     [Route("api/[controller]")]
+    [Authorize]
+
     [ApiController]
     public class ServicesController : ControllerBase
     {
@@ -87,7 +90,7 @@ namespace freelanceProjectEgypt03.Controllers
                     FilePath = file.FilePath,
                     Size = file.Size,
                     UploadedAt = file.UploadedAt,
-                    FileUrl = $"{baseUrl}/{file.FilePath.Replace("\\", "/")}" // ✅ Full URL
+                    FileUrl = $"{baseUrl}/{file.FilePath.Replace("\\", "/")}" 
 
                 }).ToList()
             };
@@ -97,7 +100,7 @@ namespace freelanceProjectEgypt03.Controllers
 
 
         [HttpPost]
-        [RequestSizeLimit(104857600)] // Max 100MB
+        [RequestSizeLimit(104857600)] 
         public async Task<IActionResult> AddService([FromForm] ServiceDto dto)
         {
             var service = new Service
@@ -142,13 +145,12 @@ namespace freelanceProjectEgypt03.Controllers
             return Ok(new { message = "Service created successfully", service.Id });
         }
         [HttpPut("{id}")]
-        [RequestSizeLimit(104_857_600)] // 100 MB
+        [RequestSizeLimit(104_857_600)] 
         public async Task<IActionResult> UpdateService(int id, [FromForm] ServiceDto dto)
         {
             var existing = await _context.Services.Include(s => s.Files).FirstOrDefaultAsync(s => s.Id == id);
             if (existing == null) return NotFound();
 
-            // Mettre à jour les infos principales
             existing.Title = dto.Title;
             existing.Description = dto.Description;
             existing.DurationMin = dto.DurationMin;
@@ -157,7 +159,6 @@ namespace freelanceProjectEgypt03.Controllers
             existing.Price = dto.Price;
             existing.details = dto.Details;
 
-            // Supprimer les anciens fichiers (BD + fichier physique)
             foreach (var file in existing.Files)
             {
                 var physicalPath = Path.Combine(_env.WebRootPath, file.FilePath);
@@ -167,11 +168,9 @@ namespace freelanceProjectEgypt03.Controllers
                 }
             }
 
-            // Supprimer les fichiers de la BD
             _context.files.RemoveRange(existing.Files);
-            existing.Files.Clear(); // Important pour réinitialiser avant d'ajouter les nouveaux
+            existing.Files.Clear(); 
 
-            // Ajouter les nouveaux fichiers
             var uploadPath = Path.Combine(_env.WebRootPath, "uploads", "services");
             Directory.CreateDirectory(uploadPath);
 
@@ -207,7 +206,6 @@ namespace freelanceProjectEgypt03.Controllers
             var service = await _context.Services.Include(s => s.Files).FirstOrDefaultAsync(s => s.Id == id);
             if (service == null) return NotFound();
 
-            // حذف الملفات من السيرفر
             foreach (var file in service.Files)
             {
                 var path = Path.Combine(_env.WebRootPath, file.FilePath);

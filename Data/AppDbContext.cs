@@ -18,28 +18,24 @@
 
             protected override void OnModelCreating(ModelBuilder modelBuilder)
             {
-                // ✅ DemandeDeService → Client (many-to-one)
                 modelBuilder.Entity<DemandeDeService>()
                     .HasOne(d => d.client)
                     .WithMany(c => c.demandeDeServices)
                     .HasForeignKey(d => d.ClientId)
                     .OnDelete(DeleteBehavior.Cascade);
 
-                // ✅ DemandeDeService → Service (many-to-one)
                 modelBuilder.Entity<DemandeDeService>()
                     .HasOne(d => d.service)
                     .WithMany(s => s.demandeDeServices)
                     .HasForeignKey(d => d.ServiceId)
                     .OnDelete(DeleteBehavior.Cascade);
 
-                // ✅ ServiceFile → Service (many-to-one)
                 modelBuilder.Entity<FileAttachment>()
                     .HasOne(f => f.Service)
                     .WithMany(s => s.Files)
                     .HasForeignKey(f => f.ServiceId)
                     .OnDelete(DeleteBehavior.Cascade);
 
-                // ✅ Handle List<string> in DemandeDeService (stored as string)
                 modelBuilder.Entity<DemandeDeService>()
                     .Property(d => d.AdditionalServices)
                     .HasConversion(

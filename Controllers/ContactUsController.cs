@@ -17,7 +17,6 @@ namespace freelanceProjectEgypt03.Controllers
             _repository = repository;
         }
 
-        // GET: api/ContactUs
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
@@ -38,7 +37,6 @@ namespace freelanceProjectEgypt03.Controllers
             return Ok(result);
         }
 
-        // GET: api/ContactUs/5
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {
@@ -62,7 +60,6 @@ namespace freelanceProjectEgypt03.Controllers
             return Ok(dto);
         }
 
-        // POST: api/ContactUs
         [HttpPost]
         public async Task<IActionResult> Add([FromBody] ContactUsDto dto)
         {
@@ -85,7 +82,6 @@ namespace freelanceProjectEgypt03.Controllers
             return Ok("Message envoyé avec succès.");
         }
 
-        // PUT: api/ContactUs/5
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(int id, [FromBody] ContactUsDto dto)
         {
@@ -111,7 +107,6 @@ namespace freelanceProjectEgypt03.Controllers
             return Ok("Message mis à jour avec succès.");
         }
 
-        // DELETE: api/ContactUs/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {

@@ -10,13 +10,13 @@ namespace freelanceProjectEgypt03.Models
         [Required]
         public string FileName { get; set; }
 
-        public string FilePath { get; set; } // Or URL if stored externally
+        public string FilePath { get; set; }
 
         public long Size { get; set; }
 
         public DateTime UploadedAt { get; set; }
 
-        // Foreign Key
+      
         public int ServiceId { get; set; }
 
         [ForeignKey("ServiceId")]

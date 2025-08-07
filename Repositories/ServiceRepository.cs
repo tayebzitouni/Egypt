@@ -37,12 +37,12 @@ namespace freelanceProjectEgypt03.Repositories
 
         public async Task<List<Service>> GetAllAsync() =>
             await _context.Services
-                .Include(s => s.Partners)  // Include related partners
+                .Include(s => s.Partners) 
                 .ToListAsync();
 
         public async Task<Service> GetByIdAsync(int id) =>
             await _context.Services
-                .Include(s => s.Partners)  // Include related partners
+                .Include(s => s.Partners)  
                 .FirstOrDefaultAsync(s => s.Id == id);
 
         public async Task<string> UpdateAsync(int id, Service entity)
