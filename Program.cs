@@ -1,4 +1,6 @@
-﻿using freelanceProjectEgypt03.Models;
+﻿
+
+using freelanceProjectEgypt03.Models;
 using freelanceProjectEgypt03.Interfaces;
 using freelanceProjectEgypt03.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -8,7 +10,11 @@ using Microsoft.OpenApi.Models;
 using System.Text;
 using freelanceProjectEgypt03.data.freelanceProjectEgypt03.Data;
 
-var builder = WebApplication.CreateBuilder(args);
+var builder = WebApplication.CreateBuilder(new WebApplicationOptions
+{
+    Args = args,
+    WebRootPath = "wwwroot" 
+});
 
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
@@ -69,7 +75,8 @@ builder.Services.AddSwaggerGen(options =>
         }
     });
 });
-builder.WebHost.UseWebRoot("wwwroot");
+
+
 
 var app = builder.Build();
 

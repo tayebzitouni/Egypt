@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Authorization;
 namespace freelanceProjectEgypt03.Controllers
 {
     [Route("api/[controller]")]
-    [Authorize]
+    
 
     [ApiController]
     public class ServicesController : ControllerBase
